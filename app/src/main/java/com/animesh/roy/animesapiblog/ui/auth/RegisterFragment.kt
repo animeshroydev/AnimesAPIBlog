@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.animesh.roy.animesapiblog.R
+import com.animesh.roy.animesapiblog.ui.auth.state.RegistrationFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
+import kotlinx.android.synthetic.main.fragment_register.*
 
 
 class RegisterFragment : BaseAuthFragment() {
@@ -27,23 +29,31 @@ class RegisterFragment : BaseAuthFragment() {
 
         Log.d(TAG, "RegisterFragment: ${viewModel.hashCode()}")
 
+        subscribeObservers()
 
-        viewModel.testRegister().observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
+    }
 
-                is GenericApiResponse.ApiSuccessResponse -> {
-                    Log.d(TAG, "REGISTRATION RESPONSE: ${response.body} ")
-                }
-
-                is GenericApiResponse.ApiErrorResponse -> {
-                    Log.d(TAG, "REGISTRATION RESPONSE: ${response.errorMessage} ")
-                }
-
-                is GenericApiResponse.ApiEmptyResponse -> {
-                    Log.d(TAG, "REGISTRATION RESPONSE: Empty Response ")
-                }
+    fun subscribeObservers() {
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            it.registrationFields?.let { registrationFields ->
+                registrationFields.registration_email?.let { input_email.setText(it) }
+                registrationFields.registration_username?.let {  input_username.setText(it) }
+                registrationFields.registration_password?.let {  input_password.setText(it) }
+                registrationFields.registration_confirm_password?.let {  input_password_confirm.setText(it) }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setRegistrationFields(
+          RegistrationFields(
+              input_email.text.toString(),
+              input_username.text.toString(),
+              input_password.text.toString(),
+              input_password_confirm.text.toString()
+          )
+        )
     }
 
 }

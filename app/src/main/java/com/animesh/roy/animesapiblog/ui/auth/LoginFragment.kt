@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.animesh.roy.animesapiblog.R
+import com.animesh.roy.animesapiblog.ui.auth.state.LoginFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
+import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment : BaseAuthFragment() {
@@ -26,22 +28,27 @@ class LoginFragment : BaseAuthFragment() {
 
         Log.d(TAG, "LoginFragment: ${viewModel.hashCode()}")
 
-        viewModel.testLogin().observe(viewLifecycleOwner, Observer { response ->
-            when(response) {
+        subscribeObservers()
 
-                is GenericApiResponse.ApiSuccessResponse -> {
-                    Log.d(TAG, "LOGIN RESPONSE: ${response.body} ")
-                }
+    }
 
-                is GenericApiResponse.ApiErrorResponse -> {
-                    Log.d(TAG, "LOGIN RESPONSE: ${response.errorMessage} ")
-                }
-
-                is GenericApiResponse.ApiEmptyResponse -> {
-                    Log.d(TAG, "LOGIN RESPONSE: Empty Response ")
-                }
+    fun subscribeObservers() {
+        viewModel.viewState.observe(viewLifecycleOwner, Observer {
+            it.loginFields?.let { loginFields ->
+                loginFields.login_email?.let { input_email.setText(it) }
+                loginFields.login_password?.let { input_password.setText(it) }
             }
         })
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        viewModel.setLoginFields(
+            LoginFields(
+                input_email.text.toString(),
+                input_password.text.toString()
+            )
+        )
     }
 
 }
