@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 
 import com.animesh.roy.animesapiblog.R
+import com.animesh.roy.animesapiblog.models.AuthToken
 import com.animesh.roy.animesapiblog.ui.auth.state.LoginFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -29,6 +30,7 @@ class LoginFragment : BaseAuthFragment() {
         Log.d(TAG, "LoginFragment: ${viewModel.hashCode()}")
 
         subscribeObservers()
+
 
     }
 
