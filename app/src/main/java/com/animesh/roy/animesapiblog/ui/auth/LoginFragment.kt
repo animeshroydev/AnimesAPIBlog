@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 
 import com.animesh.roy.animesapiblog.R
 import com.animesh.roy.animesapiblog.models.AuthToken
+import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent
 import com.animesh.roy.animesapiblog.ui.auth.state.LoginFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -31,6 +32,9 @@ class LoginFragment : BaseAuthFragment() {
 
         subscribeObservers()
 
+        login_button.setOnClickListener {
+          login()
+        }
 
     }
 
@@ -41,6 +45,15 @@ class LoginFragment : BaseAuthFragment() {
                 loginFields.login_password?.let { input_password.setText(it) }
             }
         })
+    }
+
+    fun login() {
+        viewModel.setStateEvent(
+            AuthStateEvent.LoginAttemptEvent(
+                input_email.text.toString(),
+                input_password.text.toString()
+            )
+        )
     }
 
     override fun onDestroyView() {
