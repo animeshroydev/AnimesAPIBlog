@@ -7,8 +7,10 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import dagger.android.AndroidInjector
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Singleton
 
+@OptIn(InternalCoroutinesApi::class)
 @Singleton
 @Component(
     modules = [
