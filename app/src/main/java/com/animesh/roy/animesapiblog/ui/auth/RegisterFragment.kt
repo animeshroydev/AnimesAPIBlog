@@ -13,8 +13,10 @@ import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent
 import com.animesh.roy.animesapiblog.ui.auth.state.RegistrationFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.coroutines.InternalCoroutinesApi
 
 
+@OptIn(InternalCoroutinesApi::class)
 class RegisterFragment : BaseAuthFragment() {
 
     override fun onCreateView(

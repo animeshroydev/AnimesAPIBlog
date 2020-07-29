@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.animesh.roy.animesapiblog.R
+import kotlinx.coroutines.InternalCoroutinesApi
 
 
+@InternalCoroutinesApi
 class ForgotPasswordFragment : BaseAuthFragment() {
 
     override fun onCreateView(

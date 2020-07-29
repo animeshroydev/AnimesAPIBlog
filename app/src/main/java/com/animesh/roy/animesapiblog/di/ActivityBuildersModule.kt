@@ -8,7 +8,9 @@ import com.animesh.roy.animesapiblog.ui.auth.AuthActivity
 import com.animesh.roy.animesapiblog.ui.main.MainActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Module
 abstract class ActivityBuildersModule {
 

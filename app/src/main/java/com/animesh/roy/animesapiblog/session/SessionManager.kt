@@ -71,11 +71,11 @@ constructor(
         }
     }
 
-    fun isConnectedToTheInternet(): Boolean? {
+    fun isConnectedToTheInternet(): Boolean {
         val cm = application.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
         try {
-            return cm.activeNetworkInfo?.isConnected
+            return cm.activeNetworkInfo.isConnected
         } catch (e: Exception) {
             Log.e(TAG, "isConnectedToInternet: ${e.message}")
         }

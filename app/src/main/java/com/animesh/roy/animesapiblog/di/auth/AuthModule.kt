@@ -7,8 +7,10 @@ import com.animesh.roy.animesapiblog.repository.auth.AuthRepository
 import com.animesh.roy.animesapiblog.session.SessionManager
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.InternalCoroutinesApi
 import retrofit2.Retrofit
 
+@InternalCoroutinesApi
 @Module
 class AuthModule {
 

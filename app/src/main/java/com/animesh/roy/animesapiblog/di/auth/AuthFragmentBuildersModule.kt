@@ -6,7 +6,9 @@ import com.animesh.roy.animesapiblog.ui.auth.LoginFragment
 import com.animesh.roy.animesapiblog.ui.auth.RegisterFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Module
 abstract class AuthFragmentBuildersModule {
 

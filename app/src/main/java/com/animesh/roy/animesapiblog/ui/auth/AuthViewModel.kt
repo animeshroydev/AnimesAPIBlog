@@ -14,8 +14,10 @@ import com.animesh.roy.animesapiblog.ui.auth.state.LoginFields
 import com.animesh.roy.animesapiblog.ui.auth.state.RegistrationFields
 import com.animesh.roy.animesapiblog.util.AbsentLiveData
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
+import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
+@InternalCoroutinesApi
 class AuthViewModel
 @Inject
 constructor(
@@ -80,6 +82,15 @@ constructor(
 
     override fun initNewViewState(): AuthViewState {
         return AuthViewState()
+    }
+
+    fun cancelActiveJobs() {
+        authRepository.cancelActiveJobs()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        cancelActiveJobs()
     }
 
 }

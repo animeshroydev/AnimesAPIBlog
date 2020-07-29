@@ -9,7 +9,9 @@ import com.animesh.roy.animesapiblog.R
 import com.animesh.roy.animesapiblog.ui.BaseActivity
 import com.animesh.roy.animesapiblog.ui.auth.AuthActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 class MainActivity: BaseActivity() {
 
 

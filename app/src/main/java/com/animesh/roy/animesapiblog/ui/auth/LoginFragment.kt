@@ -13,8 +13,10 @@ import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent
 import com.animesh.roy.animesapiblog.ui.auth.state.LoginFields
 import com.animesh.roy.animesapiblog.util.GenericApiResponse
 import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.coroutines.InternalCoroutinesApi
 
 
+@InternalCoroutinesApi
 class LoginFragment : BaseAuthFragment() {
 
     override fun onCreateView(

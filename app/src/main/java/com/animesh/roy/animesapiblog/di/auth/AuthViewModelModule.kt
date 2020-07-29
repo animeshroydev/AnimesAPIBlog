@@ -6,7 +6,9 @@ import com.animesh.roy.animesapiblog.ui.auth.AuthViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 @Module
 abstract class AuthViewModelModule {
 

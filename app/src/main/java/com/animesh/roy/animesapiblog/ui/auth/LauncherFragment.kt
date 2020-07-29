@@ -10,7 +10,9 @@ import androidx.navigation.fragment.findNavController
 
 import com.animesh.roy.animesapiblog.R
 import kotlinx.android.synthetic.main.fragment_launcher.*
+import kotlinx.coroutines.InternalCoroutinesApi
 
+@InternalCoroutinesApi
 class LauncherFragment : BaseAuthFragment() {
 
     override fun onCreateView(

@@ -3,11 +3,9 @@ package com.animesh.roy.animesapiblog.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import com.animesh.roy.animesapiblog.models.AuthToken
 import com.animesh.roy.animesapiblog.ui.DataState
 import com.animesh.roy.animesapiblog.ui.Response
 import com.animesh.roy.animesapiblog.ui.ResponseType
-import com.animesh.roy.animesapiblog.ui.auth.state.AuthViewState
 import com.animesh.roy.animesapiblog.util.Constants.Companion.NETWORK_TIMEOUT
 import com.animesh.roy.animesapiblog.util.Constants.Companion.TESTING_NETWORK_DELAY
 import com.animesh.roy.animesapiblog.util.ErrorHandling
@@ -21,8 +19,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
 @InternalCoroutinesApi
-abstract class NetworkBoundResource<ResponseObject, ViewStateType>
-    (
+abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
     isNetworkAvailable: Boolean // is there a network connection
 ) {
 
