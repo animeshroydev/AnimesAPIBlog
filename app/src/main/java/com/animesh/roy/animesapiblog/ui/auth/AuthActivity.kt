@@ -5,6 +5,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
@@ -15,6 +16,7 @@ import com.animesh.roy.animesapiblog.ui.BaseActivity
 import com.animesh.roy.animesapiblog.ui.ResponseType
 import com.animesh.roy.animesapiblog.ui.main.MainActivity
 import com.animesh.roy.animesapiblog.viewmodels.ViewModelProviderFactory
+import kotlinx.android.synthetic.main.activity_auth.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import javax.inject.Inject
 
@@ -28,6 +30,7 @@ NavController.OnDestinationChangedListener
 
     lateinit var viewmodel: AuthViewModel
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
@@ -40,6 +43,7 @@ NavController.OnDestinationChangedListener
 
     fun subscribeObservers() {
         viewmodel.dataState.observe(this, Observer { dataState ->
+            onDataStateChange(dataState)
             dataState.data?.let { data ->
                 data.data?.let { event ->
 
@@ -47,26 +51,6 @@ NavController.OnDestinationChangedListener
                         it.authToken?.let {
                             Log.d(TAG, "AuthActivity, DataState: ${it}")
                             viewmodel.setAuthToken(it)
-                        }
-                    }
-
-                }
-
-                data.response?.let { event->
-                    event.getContentIfNotHandled()?.let {
-                        when(it.responseType) {
-                            is ResponseType.Dialog -> {
-
-                            }
-
-                            is ResponseType.Toast -> {
-
-                            }
-
-                            is ResponseType.None -> {
-                                Log.e(TAG,"AuthActivity, Response: ${it.message}")
-                            }
-
                         }
                     }
                 }
@@ -100,5 +84,13 @@ NavController.OnDestinationChangedListener
         arguments: Bundle?
     ) {
         viewmodel.cancelActiveJobs()
+    }
+
+    override fun displayProgressBar(bool: Boolean) {
+        if (bool) {
+            progress_bar.visibility = View.VISIBLE
+        } else {
+            progress_bar.visibility = View.GONE
+        }
     }
 }
