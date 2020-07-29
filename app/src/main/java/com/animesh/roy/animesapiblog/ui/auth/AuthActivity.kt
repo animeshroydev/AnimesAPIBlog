@@ -14,6 +14,7 @@ import androidx.navigation.findNavController
 import com.animesh.roy.animesapiblog.R
 import com.animesh.roy.animesapiblog.ui.BaseActivity
 import com.animesh.roy.animesapiblog.ui.ResponseType
+import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent
 import com.animesh.roy.animesapiblog.ui.main.MainActivity
 import com.animesh.roy.animesapiblog.viewmodels.ViewModelProviderFactory
 import kotlinx.android.synthetic.main.activity_auth.*
@@ -39,6 +40,7 @@ NavController.OnDestinationChangedListener
         findNavController(R.id.auth_nav_host_fragment).addOnDestinationChangedListener(this)
 
         subscribeObservers()
+        checkPreviousAuthUser()
     }
 
     fun subscribeObservers() {
@@ -70,6 +72,10 @@ NavController.OnDestinationChangedListener
                 navMainActivity()
             }
         })
+    }
+
+    fun checkPreviousAuthUser() {
+        viewmodel.setStateEvent(AuthStateEvent.CheckPreviousAuthEvent())
     }
 
     private fun navMainActivity() {

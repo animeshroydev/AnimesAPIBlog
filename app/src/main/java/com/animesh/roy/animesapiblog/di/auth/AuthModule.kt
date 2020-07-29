@@ -1,5 +1,6 @@
 package com.animesh.roy.animesapiblog.di.auth
 
+import android.content.SharedPreferences
 import com.animesh.roy.animesapiblog.api.auth.OpenApiAuthService
 import com.animesh.roy.animesapiblog.persistence.AccountPropertiesDao
 import com.animesh.roy.animesapiblog.persistence.AuthTokenDao
@@ -28,13 +29,17 @@ class AuthModule {
         sessionManager: SessionManager,
         authTokenDao: AuthTokenDao,
         accountPropertiesDao: AccountPropertiesDao,
-        openApiAuthService: OpenApiAuthService
+        openApiAuthService: OpenApiAuthService,
+        sharedPreferences: SharedPreferences,
+        editor: SharedPreferences.Editor
     ): AuthRepository {
         return AuthRepository(
             authTokenDao,
             accountPropertiesDao,
             openApiAuthService,
-            sessionManager
+            sessionManager,
+            sharedPreferences,
+            editor
         )
     }
 

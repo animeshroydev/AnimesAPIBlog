@@ -1,6 +1,8 @@
 package com.animesh.roy.animesapiblog.di
 
 import android.app.Application
+import android.content.Context
+import android.content.SharedPreferences
 import androidx.room.Room
 import com.animesh.roy.animesapiblog.R
 import com.animesh.roy.animesapiblog.persistence.AccountPropertiesDao
@@ -9,6 +11,7 @@ import com.animesh.roy.animesapiblog.persistence.AppDatabase.Companion.DATABASE_
 import com.animesh.roy.animesapiblog.persistence.AuthTokenDao
 import com.animesh.roy.animesapiblog.util.Constants
 import com.animesh.roy.animesapiblog.util.LiveDataCallAdapterFactory
+import com.animesh.roy.animesapiblog.util.PreferenceKeys
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
@@ -22,6 +25,17 @@ import javax.inject.Singleton
 
 @Module
 class AppModule {
+
+    @Singleton
+    @Provides
+    fun provideSharedPreference(application: Application): SharedPreferences {
+        return application.getSharedPreferences(PreferenceKeys.APP_PREFERENCES, Context.MODE_PRIVATE)
+    }
+    @Singleton
+    @Provides
+    fun provideSharedPrefsEditor(sharedPreferences: SharedPreferences): SharedPreferences.Editor {
+        return sharedPreferences.edit()
+    }
 
     @Singleton
     @Provides

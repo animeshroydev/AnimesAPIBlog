@@ -7,6 +7,7 @@ import com.animesh.roy.animesapiblog.ui.DataState
 import com.animesh.roy.animesapiblog.ui.Response
 import com.animesh.roy.animesapiblog.ui.ResponseType
 import com.animesh.roy.animesapiblog.util.Constants.Companion.NETWORK_TIMEOUT
+import com.animesh.roy.animesapiblog.util.Constants.Companion.TESTING_CACHE_DELAY
 import com.animesh.roy.animesapiblog.util.Constants.Companion.TESTING_NETWORK_DELAY
 import com.animesh.roy.animesapiblog.util.ErrorHandling
 import com.animesh.roy.animesapiblog.util.ErrorHandling.Companion.ERROR_CHECK_NETWORK_CONNECTION
@@ -20,7 +21,8 @@ import kotlinx.coroutines.Dispatchers.Main
 
 @InternalCoroutinesApi
 abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
-    isNetworkAvailable: Boolean // is there a network connection
+    isNetworkAvailable: Boolean, // is there a network connection
+    isNetworkRequest: Boolean // is this a network request
 ) {
 
     private val TAG: String = "AppDebug"
@@ -33,39 +35,54 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
         setJob(initNewJob())
         setValue(DataState.loading(isLoading = true, cachedData = null))
 
-        if (isNetworkAvailable) {
-            coroutineScope.launch {
-                // simulate a network delay
-                delay(TESTING_NETWORK_DELAY)
+        if (isNetworkRequest) {
+            if (isNetworkAvailable) {
+                coroutineScope.launch {
+                    // simulate a network delay
+                    delay(TESTING_NETWORK_DELAY)
 
-                withContext(Main) {
+                    withContext(Main) {
 
-                    // make network call
-                    val apiResponse = createCall()
-                    result.addSource(apiResponse) {response ->
-                        result.removeSource(apiResponse)
+                        // make network call
+                        val apiResponse = createCall()
+                        result.addSource(apiResponse) {response ->
+                            result.removeSource(apiResponse)
 
-                        coroutineScope.launch {
-                            handleNetworkCall(response)
+                            coroutineScope.launch {
+                                handleNetworkCall(response)
+                            }
+
                         }
-
                     }
                 }
-            }
 
-            GlobalScope.launch(IO) {
-                delay(NETWORK_TIMEOUT)
+                GlobalScope.launch(IO) {
+                    delay(NETWORK_TIMEOUT)
 
-                if (job.isCompleted) {
-                    Log.e(TAG, "NetworkBoundResource: JOB NETWORK TIMEOUT.")
-                    job.cancel(CancellationException(UNABLE_TO_RESOLVE_HOST))
+                    if (job.isCompleted) {
+                        Log.e(TAG, "NetworkBoundResource: JOB NETWORK TIMEOUT.")
+                        job.cancel(CancellationException(UNABLE_TO_RESOLVE_HOST))
+                    }
                 }
-            }
 
-        } else {
-            onErrorReturn(UNABLE_TODO_OPERATION_WO_INTERNET, shouldUseDialog = true, shouldUseToast = false)
+            } else {
+                onErrorReturn(UNABLE_TODO_OPERATION_WO_INTERNET, shouldUseDialog = true, shouldUseToast = false)
+            }
         }
+        else { // cache / Not reqiure a network connection
+            coroutineScope.launch {
+
+                // fake delay for testing cache
+                delay(TESTING_CACHE_DELAY)
+
+                // view data from cache only and return
+                createCacheRequestAndReturn()
+            }
+        }
+
+
     }
+
 
     suspend fun handleNetworkCall(response: GenericApiResponse<ResponseObject>?) {
 
@@ -146,6 +163,8 @@ abstract class NetworkBoundResource<ResponseObject, ViewStateType>(
     }
 
     fun asLiveData() = result as LiveData<DataState<ViewStateType>>
+
+    abstract suspend fun createCacheRequestAndReturn()
 
     abstract suspend fun handleApiSuccessResponse(response: GenericApiResponse.ApiSuccessResponse<ResponseObject>)
 
