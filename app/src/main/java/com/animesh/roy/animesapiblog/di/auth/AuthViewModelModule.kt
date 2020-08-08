@@ -1,20 +1,25 @@
 package com.animesh.roy.animesapiblog.di.auth
 
 import androidx.lifecycle.ViewModel
-import com.animesh.roy.animesapiblog.di.ViewModelKey
+import androidx.lifecycle.ViewModelProvider
+import com.animesh.roy.animesapiblog.di.auth.keys.AuthViewModelKey
 import com.animesh.roy.animesapiblog.ui.auth.AuthViewModel
+import com.animesh.roy.animesapiblog.viewmodels.AuthViewModelFactory
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import kotlinx.coroutines.InternalCoroutinesApi
 
-@InternalCoroutinesApi
 @Module
 abstract class AuthViewModelModule {
 
+    @AuthScope
+    @Binds
+    abstract fun bindViewModelFactory(factory: AuthViewModelFactory): ViewModelProvider.Factory
+
+    @AuthScope
     @Binds
     @IntoMap
-    @ViewModelKey(AuthViewModel::class)
+    @AuthViewModelKey(AuthViewModel::class)
     abstract fun bindAuthViewModel(authViewModel: AuthViewModel): ViewModel
 
 }

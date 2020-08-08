@@ -1,60 +1,51 @@
 package com.animesh.roy.animesapiblog.ui.auth
 
+
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.Observer
-
+import androidx.lifecycle.ViewModelProvider
 import com.animesh.roy.animesapiblog.R
-import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent
+import com.animesh.roy.animesapiblog.di.auth.AuthScope
+import com.animesh.roy.animesapiblog.ui.auth.state.AuthStateEvent.*
 import com.animesh.roy.animesapiblog.ui.auth.state.RegistrationFields
-import com.animesh.roy.animesapiblog.util.GenericApiResponse
 import kotlinx.android.synthetic.main.fragment_register.*
-import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import javax.inject.Inject
 
-
-@OptIn(InternalCoroutinesApi::class)
-class RegisterFragment : BaseAuthFragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false)
-    }
+@FlowPreview
+@ExperimentalCoroutinesApi
+@AuthScope
+class RegisterFragment
+@Inject
+constructor(
+    viewModelFactory: ViewModelProvider.Factory
+): BaseAuthFragment(R.layout.fragment_register, viewModelFactory) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Log.d(TAG, "RegisterFragment: ${viewModel.hashCode()}")
-
-
         register_button.setOnClickListener {
             register()
         }
-
         subscribeObservers()
-
     }
 
     fun subscribeObservers() {
-        viewModel.viewState.observe(viewLifecycleOwner, Observer {
-            it.registrationFields?.let { registrationFields ->
-                registrationFields.registration_email?.let { input_email.setText(it) }
-                registrationFields.registration_username?.let {  input_username.setText(it) }
-                registrationFields.registration_password?.let {  input_password.setText(it) }
-                registrationFields.registration_confirm_password?.let {  input_password_confirm.setText(it) }
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { viewState ->
+            viewState.registrationFields?.let {
+                it.registration_email?.let { input_email.setText(it) }
+                it.registration_username?.let { input_username.setText(it) }
+                it.registration_password?.let { input_password.setText(it) }
+                it.registration_confirm_password?.let { input_password_confirm.setText(it) }
             }
         })
     }
 
     fun register() {
         viewModel.setStateEvent(
-            AuthStateEvent.RegisterAttemptEvent(
+            RegisterAttemptEvent(
                 input_email.text.toString(),
                 input_username.text.toString(),
                 input_password.text.toString(),
@@ -66,13 +57,12 @@ class RegisterFragment : BaseAuthFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.setRegistrationFields(
-          RegistrationFields(
-              input_email.text.toString(),
-              input_username.text.toString(),
-              input_password.text.toString(),
-              input_password_confirm.text.toString()
-          )
+            RegistrationFields(
+                input_email.text.toString(),
+                input_username.text.toString(),
+                input_password.text.toString(),
+                input_password_confirm.text.toString()
+            )
         )
     }
-
 }

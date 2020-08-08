@@ -4,18 +4,28 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.animesh.roy.animesapiblog.models.AccountProperties
 import com.animesh.roy.animesapiblog.models.AuthToken
+import com.animesh.roy.animesapiblog.models.BlogPost
 
-@Database(entities = [AuthToken::class, AccountProperties::class], version = 1)
+@Database(entities = [AuthToken::class, AccountProperties::class, BlogPost::class], version = 1)
 abstract class AppDatabase: RoomDatabase() {
 
     abstract fun getAuthTokenDao(): AuthTokenDao
 
     abstract fun getAccountPropertiesDao(): AccountPropertiesDao
 
-    companion object {
+    abstract fun getBlogPostDao(): BlogPostDao
 
-        const val DATABASE_NAME = "app_db"
-
+    companion object{
+        val DATABASE_NAME: String = "app_db"
     }
 
+
 }
+
+
+
+
+
+
+
+

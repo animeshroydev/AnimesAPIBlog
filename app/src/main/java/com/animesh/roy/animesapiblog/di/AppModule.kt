@@ -5,16 +5,15 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.room.Room
 import com.animesh.roy.animesapiblog.R
+import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.request.RequestOptions
 import com.animesh.roy.animesapiblog.persistence.AccountPropertiesDao
 import com.animesh.roy.animesapiblog.persistence.AppDatabase
 import com.animesh.roy.animesapiblog.persistence.AppDatabase.Companion.DATABASE_NAME
 import com.animesh.roy.animesapiblog.persistence.AuthTokenDao
 import com.animesh.roy.animesapiblog.util.Constants
-import com.animesh.roy.animesapiblog.util.LiveDataCallAdapterFactory
 import com.animesh.roy.animesapiblog.util.PreferenceKeys
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.request.RequestOptions
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -24,34 +23,49 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
-class AppModule {
+object AppModule{
 
+    @JvmStatic
     @Singleton
     @Provides
-    fun provideSharedPreference(application: Application): SharedPreferences {
-        return application.getSharedPreferences(PreferenceKeys.APP_PREFERENCES, Context.MODE_PRIVATE)
+    fun provideSharedPreferences(
+        application: Application
+    ): SharedPreferences {
+        return application
+            .getSharedPreferences(
+                PreferenceKeys.APP_PREFERENCES,
+                Context.MODE_PRIVATE
+            )
     }
+
+    @JvmStatic
     @Singleton
     @Provides
-    fun provideSharedPrefsEditor(sharedPreferences: SharedPreferences): SharedPreferences.Editor {
+    fun provideSharedPrefsEditor(
+        sharedPreferences: SharedPreferences
+    ): SharedPreferences.Editor {
         return sharedPreferences.edit()
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideGsonBuilder(): Gson {
-        return GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
+        return GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .create()
     }
 
+    @JvmStatic
     @Singleton
     @Provides
-    fun provideRetrofitBuilder(gsonBuilder: Gson): Retrofit.Builder {
+    fun provideRetrofitBuilder(gsonBuilder:  Gson): Retrofit.Builder{
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
-            .addCallAdapterFactory(LiveDataCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create(gsonBuilder))
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideAppDb(app: Application): AppDatabase {
@@ -61,18 +75,21 @@ class AppModule {
             .build()
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideAuthTokenDao(db: AppDatabase): AuthTokenDao {
         return db.getAuthTokenDao()
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideAccountPropertiesDao(db: AppDatabase): AccountPropertiesDao {
         return db.getAccountPropertiesDao()
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideRequestOptions(): RequestOptions {
@@ -81,6 +98,7 @@ class AppModule {
             .error(R.drawable.default_image)
     }
 
+    @JvmStatic
     @Singleton
     @Provides
     fun provideGlideInstance(application: Application, requestOptions: RequestOptions): RequestManager {

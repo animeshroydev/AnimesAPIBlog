@@ -10,11 +10,30 @@ import com.animesh.roy.animesapiblog.models.AuthToken
 interface AuthTokenDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(authToken: AuthToken): Long
+    suspend fun insert(authToken: AuthToken): Long
 
     @Query("UPDATE auth_token SET token = null WHERE account_pk = :pk")
-    fun nullifyToken(pk: Int): Int
+    suspend fun nullifyToken(pk: Int): Int
 
     @Query("SELECT * FROM auth_token WHERE account_pk = :pk")
     suspend fun searchByPk(pk: Int): AuthToken?
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
