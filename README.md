@@ -3,6 +3,9 @@
 ### Demo video of Blog website using CRUD functionality: 
 - https://youtu.be/I5jV_RvyGv0
 
+### Django Website Repo
+https://github.com/animeshroydev/animesh-api
+
 ## Finished App Branch: 
 * https://github.com/animeshroydev/AnimesAPIBlog/tree/FinishedAppBranch
 
